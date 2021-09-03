@@ -3,6 +3,7 @@ const path = require('path')
 const utility = require('utility')
 const db = require(path.join(__dirname, '../common.js'))
 const router = express.Router()
+const jwt = require('jsonwebtoken')
 
 //注册接口
 router.post('/reguser', async (req, res) => {
@@ -45,9 +46,11 @@ router.post('/login', async (req, res) => {
   let sql = 'select id from myuser where username=? and password=?'
   let ret = await db.operateData(sql, [params.username, params.password])
   if (ret && ret.length > 0) {
+    let token = jwt.sign({ id: ret[0].id }, 'bigevent', { expiresIn: '2 days' })
     res.json({
       status: 0,
-      message: '登陆成功'
+      message: '登陆成功',
+      token: 'Bearer ' + token
     })
   } else {
     res.json({
