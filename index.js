@@ -20,6 +20,3 @@ app.listen(8888, () => {
 //配置路由模块
 app.use('/api', loginRouter)
 
-app.get('/data', (req, res) => {
-  res.send('hello')
-})
